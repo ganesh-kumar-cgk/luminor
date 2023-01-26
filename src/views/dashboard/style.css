@@ -1,0 +1,43 @@
+.rd3t-svg{
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: normal;
+}
+.name{
+    color: white;
+}
+.custom-tooltip{
+    z-index: -1;
+}
+.rd3t-link {
+    stroke: white!important; 
+}
+.tooltip {
+    background-color: white;
+    color: black;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+}
+#mypopup {
+    width: 400px;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    font-size: 10pt;
+    background-color: white;
+    border-radius: 6px;
+    color: black;
+    position: absolute;
+    display: none;
+  }
+  
+  #mypopup::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    color: black;
+    transform: rotate(45deg);
+    background-color: white;
+    position: absolute;
+    left: -6px;
+    top: 68px;
+  }  
