@@ -12,7 +12,13 @@
   "license": "MIT",
   "author": "The CoreUI Team (https://github.com/orgs/coreui/people)",
   "scripts": {
-    "server": "node server.js"   
+    "changelog": "auto-changelog --starting-version 4.4.0 --commit-limit false --hide-credit",
+    "eject": "react-scripts eject",
+    "build": "react-scripts build",
+    "start": "node server.js",    
+    "test": "react-scripts test",
+    "test:cov": "npm test -- --coverage --watchAll=false",
+    "test:debug": "react-scripts --inspect-brk test --runInBand"
   },
   "dependencies": {
     "@coreui/chartjs": "^3.0.0",
@@ -64,7 +70,7 @@
     "web-vitals": "^2.1.4"
   },
   "engines": {
-    "node": "10",
-    "npm": "6"
+    "node": ">=10",
+    "npm": ">=6"
   }
 }
