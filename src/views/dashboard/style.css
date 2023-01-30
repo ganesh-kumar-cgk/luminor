@@ -9,35 +9,26 @@
     z-index: -1;
 }
 .rd3t-link {
-    stroke: white!important; 
+    stroke: black!important; 
 }
 .tooltip {
-    background-color: white;
-    color: black;
+    background-color: black;
+    color: white;
     padding: 10px;
     position: absolute;
     z-index: 1;
 }
 #mypopup {
-    width: 400px;
-    padding: 20px;
+    width: 250px;
+    padding: 5px;
     font-family: Arial, sans-serif;
-    font-size: 10pt;
-    background-color: white;
+    font-size: 10px;
+    background-color: black;
     border-radius: 6px;
-    color: black;
+    color: white;
     position: absolute;
     display: none;
   }
-  
-  #mypopup::before {
-    content: "";
-    width: 12px;
-    height: 12px;
-    color: black;
-    transform: rotate(45deg);
-    background-color: white;
-    position: absolute;
-    left: -6px;
-    top: 68px;
-  }  
+  .classhover:hover {
+    background-color: #321fdb;
+  }

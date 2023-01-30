@@ -39,7 +39,7 @@ const AppBreadcrumb = () => {
           <CBreadcrumbItem
             {...(breadcrumb.active ? { active: true } : { href: breadcrumb.pathname })}
             key={index}
-            className="bg-lightsy"
+            className=""
           >
             {breadcrumb.name}
           </CBreadcrumbItem>
