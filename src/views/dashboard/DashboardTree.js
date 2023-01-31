@@ -13,12 +13,13 @@ import Pagination from "./Pagination";
 
 const DashTree = () => {
     const [data, setData] = useState({"name": "roots","id": "R0001","type": "step1","children": []});
+    const [treeData, setTreeData] = useState({"name": "roots","id": "R0001","type": "step1","children": []});
     const [datas, setDatas] = useState(treedata);    
     const [start, setStart] = useState(0); 
     const [end, setEnd] = useState(40);
     const [tooltip, setTooltipVisible] = useState(false);
     const [dimensions, translate, containerRef] = useCenteredTree();    
-    let [loadingSpinner, setLoadingSpinner] = useState(true);
+    const [loadingSpinner, setLoadingSpinner] = useState(true);
     let id = 0;
     const onChangePage = (pageOfItems,startIndex,endIndex) => {
       console.log("onchange");
@@ -26,15 +27,18 @@ const DashTree = () => {
       console.log(endIndex);
       setStart(endIndex);
       setEnd(startIndex + endIndex);
-    
+      setLoadingSpinner(true);    
       console.log(start);
       console.log(end);
-      setLoadingSpinner(true);
-      console.log(loadingSpinner);
-      setData({"name": "roots","gid": "R0001","itemtype": "step1","children": pageOfItems})              
-      setLoadingSpinner(false);
-      console.log(loadingSpinner);
-      };    
+      let orgChartString = JSON.stringify(pageOfItems);
+      orgChartString = orgChartString.replace(/downstream/g, 'children');
+      pageOfItems = JSON.parse(orgChartString);
+      setTreeData({"name": "roots","gid": "R0001","itemtype": "step1","children": pageOfItems});
+      setData({"name": "roots","gid": "R0001","itemtype": "step1","children": pageOfItems})    
+      setTimeout(() => {
+        setLoadingSpinner(false);
+      }, 3000);                
+    };    
     const renderRectSvgNode = ({ nodeDatum, toggleNode }) => {
         let shortText = nodeDatum['name'].substring(0, 45);
         let firstLine = shortText.substring(0, 30);
@@ -76,8 +80,8 @@ const DashTree = () => {
             <line id="Line_329" data-name="Line 329" x2="200" transform="translate(542.5 554.5)" fill="none" stroke={backgroundColor} stroke-width="2"/>
           </g>
           <text id="Dasboard" strokeWidth="0" transform="translate(704 608)" fill="#1993e6" font-size="10" font-family="'Rubik', sans-serif"><tspan x="-30" y="0" stroke='white' onMouseOver={(e) => handleMouseOver(nodeDatum.name,svg_id,event)} onMouseOut={() => handleMouseOut(svg_id)} >Read more</tspan></text>
-          <a href="https://google.com" style={{"text-decoration": "none"}} target="_blank"><text id="Dasboard-2" strokeWidth="0" data-name="Dasboard" transform="translate(622 553)" fill="#fff" font-size="21" font-family="'Rubik', sans-serif"><tspan x="-30" y="0" stroke='white'> {nodeDatum['gid']}</tspan></text></a>
-          <text id="" strokeWidth="0" transform="translate(546 571)" fill="#fff" font-size="15" font-family="'Rubik', sans-serif"><tspan x="0" y="14" stroke='white'>{firstLine}</tspan><tspan x="0" y="36">{secondData}</tspan></text>
+          <text id="Dasboard-2" strokeWidth="0" data-name="Dasboard" transform="translate(622 553)" fill="#fff" font-size="21" font-family="'Rubik', sans-serif"><tspan x="-30" y="0" stroke='white'> {nodeDatum['gid']}</tspan></text>
+          <text id="" strokeWidth="0" transform="translate(546 571)" fill="#fff" font-size="15" font-family="'Rubik', sans-serif"><tspan x="0" y="14" stroke='white'>{firstLine}</tspan><tspan x="0" y="36">{nodeDatum.__rd3t.collapsed ? 'Expand' : 'Collapse'}</tspan></text>
           </g>          
           {id++}
           </>       
@@ -127,7 +131,11 @@ const DashTree = () => {
       }
       function handleLoadMore() {
           
-        let children = datas.children.slice(start,end);
+        let children = datas.downstream.slice(start,end);
+        let orgChartString = JSON.stringify(children);
+        orgChartString = orgChartString.replace(/downstream/g, 'children');
+        children = JSON.parse(orgChartString);
+        
         console.log(children);
         const child = children[start];
         setStart(end);
@@ -135,9 +143,11 @@ const DashTree = () => {
       
         console.log(start);
         console.log(end);
+        setTreeData({"name": "roots","gid": "R0001","itemtype": "step1","children": children});
         setData({"name": "roots","gid": "R0001","itemtype": "step1","children": children})        
         setLoadingSpinner(false);
       }
+
       useEffect(() => {
         handleLoadMore();
       }, []);    
@@ -148,7 +158,9 @@ const DashTree = () => {
           <CCol xs={12} style={{"height":"600px"}}>
           {
             loadingSpinner ? (
-              <CSpinner component="span" size="sm" aria-hidden="false"/>
+              <div className="d-flex align-items-center justify-content-center" style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
+                <CSpinner component="span" size="lg" aria-hidden="false"/>
+              </div>
             ) : (
               <Tree 
             data={data} 
@@ -159,7 +171,7 @@ const DashTree = () => {
             childrenKey="children"  
             nodeSvgShape={svgSquare}
             pathFunc="step"
-            zoom={0.5}       
+            zoom={0.3}       
             translate={translate}
             nodeSize={{
               x: 540,
@@ -183,7 +195,7 @@ const DashTree = () => {
 {/*            <button className='btn btn-primary' onClick={(e)=>handleLoadMore()}>Load Next Data</button>    */}
             <Pagination
              pageSize={40}
-             items={treedata['children']}
+             items={treedata['downstream']}
              onChangePage={onChangePage}
              />            
         </CCol>
