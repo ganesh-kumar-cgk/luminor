@@ -40,49 +40,86 @@ const DashTree = () => {
       }, 3000);                
     };    
     const renderRectSvgNode = ({ nodeDatum, toggleNode }) => {
-        let shortText = nodeDatum['name'].substring(0, 45);
+      console.log(nodeDatum);
+        let shortText = nodeDatum['name'].substring(0, 110);
         let firstLine = shortText.substring(0, 30);
-        let secondLine = shortText.substring(30, 50);
+        let secondLine = shortText.substring(30, 60);
+        let thirdLine = shortText.substring(60, 90);        
+        let fourthLine = shortText.substring(90, 110);        
         let secondData = '';
         let backgroundColor = '';
-        if(nodeDatum['itemtype'] === "step1"){
-          backgroundColor = "#fd7e14";
+        if(nodeDatum.__rd3t.depth === 0){
+          backgroundColor = "#00973d";
         }
-        else if(nodeDatum['itemtype'] === "step2"){
-          backgroundColor = "#0dcaf0";
+        else if(nodeDatum.__rd3t.depth === 1){
+          backgroundColor = "#F56457";
         }
-        else if(nodeDatum['itemtype'] === "step3"){
-          backgroundColor = "#198754";
+        else if(nodeDatum.__rd3t.depth === 2){
+          backgroundColor = "#7E1470";
         }
-        else if(nodeDatum['itemtype'] === "step4"){
-          backgroundColor = "#dc3545";
+        else if(nodeDatum.__rd3t.depth === 3){
+          backgroundColor = "#3245BF";
+        }
+        else if(nodeDatum.__rd3t.depth === 4){
+          backgroundColor = "#5D6E1E";
+        }
+        else if(nodeDatum.__rd3t.depth === 5){
+          backgroundColor = "#BD3B1B";
+        }
+        else if(nodeDatum.__rd3t.depth === 6){
+          backgroundColor = "#E83845";
         }
         else {
-          backgroundColor = "#141517";
+          backgroundColor = "#012F63";
         }                        
-        if(secondLine === ''){
+        if(fourthLine === ''){
           secondData = '';
         }
         else{
-          secondData = secondLine + '...';
+          secondData = fourthLine + '...';
         }
         shortText = shortText + '...'
         let type = nodeDatum.itemtype;
         let svg_id = "svg_id"+id;
         return (
           <>
-          <g id={svg_id} transform="translate(-536 -571)"  onClick={toggleNode}>
-          <g id="Group_5599" data-name="Group 5599" transform="translate(-5 7)">
-            <g width="230" id="Rectangle_3512" data-name="Rectangle 3512" transform="translate(541 520)" fill={backgroundColor} stroke={backgroundColor} stroke-width="2">
-              <rect width="200" height="94" rx="13" stroke="none"/>
-              <rect x="1" y="1" width="200" height="92" rx="12" fill="none"/>
-            </g>
-            <line id="Line_329" data-name="Line 329" x2="200" transform="translate(542.5 554.5)" fill="none" stroke={backgroundColor} stroke-width="2"/>
+          <g id={svg_id} transform="translate(-598 -770)" stroke-width="0">
+            <rect id="Rectangle_4292" data-name="Rectangle 4292" width="257" height="135" rx="13" transform="translate(536 713)" fill={backgroundColor}/>
+            <path id="Path_6071" data-name="Path 6071" d="M0,0H257" transform="translate(536 747.5)" fill="none" stroke="#fff" stroke-width="2"/>
+            <text id="textid" stroke-width="0" data-name={nodeDatum.name} transform="translate(546 757)" fill="#fff" font-size="15" font-family="Rubik-Regular, Rubik"><tspan x="0" y="14">{firstLine}</tspan><tspan x="0" y="36">{secondLine} </tspan><tspan x="0" y="58">{thirdLine}</tspan><tspan x="0" y="80">{fourthLine}</tspan></text>
+            {
+              secondData === '' ? (
+                <></>
+              ) : (
+                <text id="Dasboard" transform="translate(704 837)" fill="#fff" font-size="15" font-family="Rubik-Regular, Rubik" text-decoration="underline" stroke-width="0"><tspan x="0" y="0" onMouseOver={(e) => handleMouseOver(nodeDatum.name,svg_id,event)} onMouseOut={() => handleMouseOut(svg_id)} >Read more</tspan></text>
+              )
+            }            
+            <text id="Dasboard-2" data-name="Dasboard" transform="translate(546 738)" fill="#fff" font-size="21" font-family="Rubik-Regular, Rubik" stroke-width="0"><tspan x="0" y="0"> {nodeDatum['gid']}</tspan></text>
+            {nodeDatum.__rd3t.collapsed ?(
+              <>
+                <text id="Dasboard-3" data-name="Dasboard" transform="translate(707 736)" fill="#fff" font-size="15" font-family="Rubik-Regular, Rubik" stroke-width="0" onClick={toggleNode}><tspan x="0" y="0">{nodeDatum.__rd3t.collapsed ? 'Expand' : 'Collapse'}</tspan></text>
+                <g id="Navigation" transform="translate(765.154 722.395)">
+                  <g id="_-Round-_-Navigation-_-arrow_back_ios" data-name="-Round-/-Navigation-/-arrow_back_ios" transform="translate(0 0)">
+                    <g id="Group_277" data-name="Group 277">
+                      <path id="_-Icon-Color" stroke-width="0" data-name="🔹-Icon-Color" d="M.338,16.864a1.145,1.145,0,0,0,1.622,0L9.578,9.247a.913.913,0,0,0,0-1.292L1.96.337A1.147,1.147,0,0,0,.338,1.959L6.974,8.605.329,15.251A1.143,1.143,0,0,0,.338,16.864Z" transform="translate(0 0)" fill="#fff" fill-rule="evenodd"/>
+                    </g>
+                  </g>
+                </g>
+              </>
+            ) : (
+              <>
+                <text id="Dasboard-3" data-name="Dasboard" transform="translate(717 736)" fill="#fff" font-size="15" font-family="Rubik-Regular, Rubik" stroke-width="0" onClick={toggleNode}><tspan x="0" y="0">{nodeDatum.__rd3t.collapsed ? 'Expand' : 'Collapse'}</tspan></text>
+                <g id="Navigation" transform="translate(695.001 720)">
+                  <g id="_-Round-_-Navigation-_-arrow_back_ios" data-name="-Round-/-Navigation-/-arrow_back_ios">
+                    <g id="Group_277" data-name="Group 277">
+                      <path id="_-Icon-Color" stroke-width="0" data-name="🔹-Icon-Color" d="M9.508,16.864a1.145,1.145,0,0,1-1.622,0L.268,9.247a.913.913,0,0,1,0-1.292L7.885.337A1.147,1.147,0,0,1,9.508,1.959L2.871,8.605l6.646,6.646A1.143,1.143,0,0,1,9.508,16.864Z" transform="translate(5.727 2.395)" fill="#fff" fill-rule="evenodd"/>
+                    </g>
+                  </g>
+                </g>            
+              </>
+            )
+            }
           </g>
-          <text id="Dasboard" strokeWidth="0" transform="translate(704 608)" fill="#1993e6" font-size="10" font-family="'Rubik', sans-serif"><tspan x="-30" y="0" stroke='white' onMouseOver={(e) => handleMouseOver(nodeDatum.name,svg_id,event)} onMouseOut={() => handleMouseOut(svg_id)} >Read more</tspan></text>
-          <text id="Dasboard-2" strokeWidth="0" data-name="Dasboard" transform="translate(622 553)" fill="#fff" font-size="21" font-family="'Rubik', sans-serif"><tspan x="-30" y="0" stroke='white'> {nodeDatum['gid']}</tspan></text>
-          <text id="" strokeWidth="0" transform="translate(546 571)" fill="#fff" font-size="15" font-family="'Rubik', sans-serif"><tspan x="0" y="14" stroke='white'>{firstLine}</tspan><tspan x="0" y="36">{nodeDatum.__rd3t.collapsed ? 'Expand' : 'Collapse'}</tspan></text>
-          </g>          
           {id++}
           </>       
         );
@@ -155,14 +192,21 @@ const DashTree = () => {
     return (
       <>
         <CRow>
-          <CCol xs={12} style={{"height":"600px"}}>
+        <CCol xs={12} className="d-flex justify-content-end mb-4 pt-4">
+          <Pagination
+            pageSize={40}
+            items={treedata['downstream']}
+            onChangePage={onChangePage}
+          />            
+        </CCol>
+          <CCol xs={12} style={{"height":"800px"}}>
           {
             loadingSpinner ? (
               <div className="d-flex align-items-center justify-content-center" style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
                 <CSpinner component="span" size="lg" aria-hidden="false"/>
               </div>
             ) : (
-              <Tree 
+          <Tree 
             data={data} 
             dimensions={dimensions}
             renderCustomNodeElement={renderRectSvgNode}
@@ -188,17 +232,6 @@ const DashTree = () => {
               <p id="svg_content"></p>
             </div>        
           </CCol>
-          <CCol xs={6}>
-            
-          </CCol>
-          <CCol xs={6}>
-{/*            <button className='btn btn-primary' onClick={(e)=>handleLoadMore()}>Load Next Data</button>    */}
-            <Pagination
-             pageSize={40}
-             items={treedata['downstream']}
-             onChangePage={onChangePage}
-             />            
-        </CCol>
         </CRow>
       </>
     )

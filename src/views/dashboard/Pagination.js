@@ -84,15 +84,15 @@ return (
   <>
     <CButtonToolbar role="group" aria-label="Toolbar with button groups">
     <CButtonGroup className="me-2" role="group" aria-label="First group">
-      <CButton color="primary" disabled={pager.currentPage === 1} onClick={() => setPage(pager.currentPage - 1)}>Previous</CButton>
+      <CButton className='pagination-color' disabled={pager.currentPage === 1} onClick={() => setPage(pager.currentPage - 1)}>Previous</CButton>
     </CButtonGroup>    
     <CButtonGroup className="me-2" role="group" aria-label="First group">
       {pager.pages.map((page, index) => (
-        <CButton color="primary" key={index} className={pager.currentPage === page ? "classhover active" : "classhover"} onClick={() => setPage(page)}>{page}</CButton>
+        <CButton color="primary" key={index} className={pager.currentPage === page ? "pagination-color actives" : "pagination-color"} onClick={() => setPage(page)}>{page}</CButton>
       ))}    
     </CButtonGroup>
     <CButtonGroup className="me-2" role="group" aria-label="First group">
-      <CButton color="primary" disabled={pager.currentPage === pager.totalPages} onClick={() => setPage(pager.currentPage + 1)}>Next</CButton>
+      <CButton className='pagination-color' disabled={pager.currentPage === pager.totalPages} onClick={() => setPage(pager.currentPage + 1)}>Next</CButton>
     </CButtonGroup>        
     </CButtonToolbar>
 </>

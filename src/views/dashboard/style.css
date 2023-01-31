@@ -29,6 +29,19 @@
     position: absolute;
     display: none;
   }
-  .classhover:hover {
-    background-color: #321fdb;
-  }
+.pagination-color{
+    background-color: #3c4b64;
+    border-color: #3c4b64;    
+}
+.pagination-color:hover{
+    background-color: #6a829a;
+    border-color: #6a829a;    
+}
+.actives{
+    background-color: #6a829a;
+    border-color: #6a829a;    
+}
+.pagination-color:disabled{
+    background-color: #94a4bf;
+    border-color: #94a4bf;
+}
