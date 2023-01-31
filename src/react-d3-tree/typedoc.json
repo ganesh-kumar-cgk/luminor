@@ -1,7 +1,0 @@
-{
-  "inputFiles": ["./src"],
-  "exclude": ["**/tests/*", "**/*.test.js"],
-  "mode": "modules",
-  "out": "demo/public/docs",
-  "includeVersion": true
-}
