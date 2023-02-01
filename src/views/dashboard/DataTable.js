@@ -22,16 +22,19 @@ const STORY_HEADERS = [
   {
     prop: "title",
     title: "Requirements Description",
+    isSortable: true,
     isFilterable: true
   },
   {
     prop: "ome",
     title: "OEM Status",
+    isSortable: true,
     isFilterable: true    
   },
   {
     prop: "status",
     title: "Status",
+    isSortable: true,
     cell: (row) => {
         if (row.status === "processed") {
           return (

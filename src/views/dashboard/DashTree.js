@@ -30,14 +30,14 @@ const DashTree = () => {
       let orgChartString = JSON.stringify(convertedArr);
       orgChartString = orgChartString.replace(/downstream/g, 'children');
       pageOfItems = JSON.parse(orgChartString);
-      setTreeData(pageOfItems);
-      setData(pageOfItems)    
+      setTreeData({"name": "roots","gid": "R0001","itemtype": "step1","children": pageOfItems});
+      setData({"name": "roots","gid": "R0001","itemtype": "step1","children": pageOfItems})        
+
       setTimeout(() => {
         setLoadingSpinner(false);
       }, 500);                
     };    
     const renderRectSvgNode = ({ nodeDatum, toggleNode }) => {
-      console.log(nodeDatum);
         let shortText = nodeDatum['name'].substring(0, 110);
         let firstLine = shortText.substring(0, 30);
         let secondLine = shortText.substring(30, 60);
@@ -179,7 +179,8 @@ const DashTree = () => {
         return obj;
       }
       function handleLoadMore() {   
-        let children = datas.slice(0,1);
+        let children = datas.slice(0,40);
+        console.log(children);
         const convertedArr = children.map(convertDownstreamToArray);
         let orgChartString = JSON.stringify(convertedArr);
         orgChartString = orgChartString.replace(/downstream/g, 'children');
@@ -192,8 +193,8 @@ const DashTree = () => {
       
         console.log(start);
         console.log(end);
-        setTreeData(children);
-        setData(children)        
+        setTreeData({"name": "roots","gid": "R0001","itemtype": "step1","children": children});
+        setData({"name": "roots","gid": "R0001","itemtype": "step1","children": children})        
         setLoadingSpinner(false);
       }
       const handleChange = e => {
@@ -205,7 +206,8 @@ const DashTree = () => {
           let json = JSON.parse(val);
           console.log(json);
           treedata = json;
-          let children = json.slice(0,1);
+          let children = json.slice(0,40);
+          console.log(children);
           const convertedArr = children.map(convertDownstreamToArray);
           let orgChartString = JSON.stringify(convertedArr);
           orgChartString = orgChartString.replace(/downstream/g, 'children');
@@ -218,9 +220,8 @@ const DashTree = () => {
         
           console.log(start);
           console.log(end);
-          setTreeData(children);
-          setData(children)        
-  
+          setTreeData({"name": "roots","gid": "R0001","itemtype": "step1","children": children});
+          setData({"name": "roots","gid": "R0001","itemtype": "step1","children": children})          
         };
       };
       useEffect(() => {
@@ -235,7 +236,7 @@ const DashTree = () => {
         </CCol>
         <CCol xs={12} lg={9} className="d-flex justify-content-end mb-4 pt-4">
           <Pagination
-            pageSize={1}
+            pageSize={100}
             items={treedata}
             onChangePage={onChangePage}
           />            

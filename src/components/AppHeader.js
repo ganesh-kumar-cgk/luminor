@@ -37,7 +37,7 @@ const AppHeader = () => {
         <CHeaderNav className="d-none d-md-flex me-auto">
           <CNavItem>
             <CNavLink to="/dashboard" component={NavLink} className="">
-              Luminor Engineering Dashboard
+              Luminar Engineering Dashboard
             </CNavLink>
           </CNavItem>
         </CHeaderNav>
