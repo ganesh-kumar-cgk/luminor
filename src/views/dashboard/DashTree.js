@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react'
-import { CCard, CCardBody, CCol, CCardHeader, CRow,CSpinner } from '@coreui/react'
+import { CCard, CCardBody, CCol, CCardHeader, CRow,CSpinner,CFormInput } from '@coreui/react'
 import Tree from 'react-d3-tree'
 import { useCenteredTree } from "./helpers/Helpers"
 import './style.css';
@@ -15,6 +15,7 @@ const DashTree = () => {
     const [tooltip, setTooltipVisible] = useState(false);
     const [dimensions, translate, containerRef] = useCenteredTree();    
     const [loadingSpinner, setLoadingSpinner] = useState(true);
+    const [files, setFiles] = useState({"name": treedata[0]['name'],"id": treedata[0]['gid'],"type": treedata[0]['itemtype'],"children": []});
     let id = 0;
     const onChangePage = (pageOfItems,startIndex,endIndex) => {
       console.log("onchange");
@@ -195,7 +196,33 @@ const DashTree = () => {
         setData(children)        
         setLoadingSpinner(false);
       }
-
+      const handleChange = e => {
+        console.log("changed");
+        const fileReader = new FileReader();
+        fileReader.readAsText(e.target.files[0], "UTF-8");
+        fileReader.onload = e => {
+          let val = e.target.result;
+          let json = JSON.parse(val);
+          console.log(json);
+          treedata = json;
+          let children = json.slice(0,1);
+          const convertedArr = children.map(convertDownstreamToArray);
+          let orgChartString = JSON.stringify(convertedArr);
+          orgChartString = orgChartString.replace(/downstream/g, 'children');
+          children = JSON.parse(orgChartString);
+          
+          console.log(children);
+          const child = children[start];
+          setStart(end);
+          setEnd(end + 40);
+        
+          console.log(start);
+          console.log(end);
+          setTreeData(children);
+          setData(children)        
+  
+        };
+      };
       useEffect(() => {
         handleLoadMore();
       }, []);    
@@ -203,7 +230,10 @@ const DashTree = () => {
     return (
       <>
         <CRow>
-        <CCol xs={12} className="d-flex justify-content-end mb-4 pt-4">
+        <CCol xs={12} lg={3} className="d-flex justify-content-end mb-4 pt-4">
+          <input type="file" className='form-control' onChange={handleChange} />
+        </CCol>
+        <CCol xs={12} lg={9} className="d-flex justify-content-end mb-4 pt-4">
           <Pagination
             pageSize={1}
             items={treedata}
