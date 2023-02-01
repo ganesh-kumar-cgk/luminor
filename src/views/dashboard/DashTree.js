@@ -1,92 +1,128 @@
 import React,{useState,useEffect} from 'react'
-import { CCard, CCardBody, CCol, CCardHeader, CRow } from '@coreui/react'
+import { CCard, CCardBody, CCol, CCardHeader, CRow,CSpinner } from '@coreui/react'
 import Tree from 'react-d3-tree'
 import { useCenteredTree } from "./helpers/Helpers"
 import './style.css';
-import {fitWrappedText} from 'canvas-text-wrapper';
-import { Tooltip } from 'react-tooltip';
-import "react-tooltip/dist/react-tooltip.css";
-import treedata from './tree2.json'
-import treedata2 from './tree2.json'
-import axios from 'axios'
-
+import treedata from './json/tree.json'
+import Pagination from "./Pagination/PaginationTree";
 
 const DashTree = () => {
-    const [data, setData] = useState({"name": "roots","id": "R0001","type": "step1","children": []});
+    const [data, setData] = useState({"name": treedata[0]['name'],"id": treedata[0]['gid'],"type": treedata[0]['itemtype'],"children": []});
+    const [treeData, setTreeData] = useState({"name": treedata[0]['name'],"id": treedata[0]['gid'],"type": treedata[0]['itemtype'],"children": []});
     const [datas, setDatas] = useState(treedata);    
     const [start, setStart] = useState(0); 
     const [end, setEnd] = useState(40);
+    const [tooltip, setTooltipVisible] = useState(false);
     const [dimensions, translate, containerRef] = useCenteredTree();    
+    const [loadingSpinner, setLoadingSpinner] = useState(true);
     let id = 0;
+    const onChangePage = (pageOfItems,startIndex,endIndex) => {
+      console.log("onchange");
+      console.log(startIndex);
+      console.log(endIndex);
+      setStart(endIndex);
+      setEnd(startIndex + endIndex);
+      setLoadingSpinner(true);    
+      console.log(start);
+      console.log(end);
+      const convertedArr = pageOfItems.map(convertDownstreamToArray);
+      let orgChartString = JSON.stringify(convertedArr);
+      orgChartString = orgChartString.replace(/downstream/g, 'children');
+      pageOfItems = JSON.parse(orgChartString);
+      setTreeData(pageOfItems);
+      setData(pageOfItems)    
+      setTimeout(() => {
+        setLoadingSpinner(false);
+      }, 500);                
+    };    
     const renderRectSvgNode = ({ nodeDatum, toggleNode }) => {
-        let shortText = nodeDatum['name'].substring(0, 30);
+      console.log(nodeDatum);
+        let shortText = nodeDatum['name'].substring(0, 110);
+        let firstLine = shortText.substring(0, 30);
+        let secondLine = shortText.substring(30, 60);
+        let thirdLine = shortText.substring(60, 90);        
+        let fourthLine = shortText.substring(90, 110);        
+        let secondData = '';
+        let backgroundColor = '';
+        if(nodeDatum.itemtype === 1){
+          backgroundColor = "#00973d";
+        }
+        else if(nodeDatum.itemtype === 2){
+          backgroundColor = "#F56457";
+        }
+        else if(nodeDatum.itemtype === 3){
+          backgroundColor = "#7E1470";
+        }
+        else if(nodeDatum.itemtype === 4){
+          backgroundColor = "#3245BF";
+        }
+        else if(nodeDatum.itemtype === 5){
+          backgroundColor = "#5D6E1E";
+        }
+        else if(nodeDatum.itemtype === 6){
+          backgroundColor = "#BD3B1B";
+        }
+        else if(nodeDatum.itemtype === 7){
+          backgroundColor = "#E83845";
+        }
+        else {
+          backgroundColor = "#012F63";
+        }                        
+        if(fourthLine === ''){
+          secondData = '';
+        }
+        else{
+          secondData = fourthLine + '...';
+        }
         shortText = shortText + '...'
-        let type = nodeDatum.type;
+        let type = nodeDatum.itemtype;
         let svg_id = "svg_id"+id;
         return (
-            type === "step1" ? (
-              <>
-              <g id={svg_id} transform="translate(-536 -571)" >
-              <g id="Group_5599" data-name="Group 5599" transform="translate(-5 7)">
-                <g width="230" id="Rectangle_3512" data-name="Rectangle 3512" transform="translate(541 520)" fill="#141517" stroke="#1993e6" stroke-width="2" onClick={toggleNode}>
-                  <rect width="200" height="94" rx="13" stroke="none"/>
-                  <rect x="1" y="1" width="200" height="92" rx="12" fill="none"/>
-                </g>
-                <line id="Line_329" data-name="Line 329" x2="200" transform="translate(542.5 554.5)" fill="none" stroke="#1993e6" stroke-width="2"/>
-              </g>
-              <text id="Dasboard" strokeWidth="0" transform="translate(704 608)" fill="#1993e6" font-size="15" font-family="'Rubik', sans-serif"><tspan x="-50" y="0" stroke='white' onMouseOver={() => handleMouseOver(nodeDatum.name,svg_id)} onMouseOut={() => handleMouseOut(svg_id)} >Read more</tspan></text>
-              <text id="Dasboard-2" strokeWidth="0" data-name="Dasboard" transform="translate(622 553)" fill="#fff" font-size="21" font-family="'Rubik', sans-serif"><tspan x="-30" y="0" stroke='white'>ID : {nodeDatum['id']}</tspan></text>
-              <text id="" strokeWidth="0" transform="translate(546 571)" fill="#fff" font-size="15" font-family="'Rubik', sans-serif"><tspan x="0" y="14" stroke='white'>{shortText}</tspan></text>
-              </g>          
-              {id++}
-            </>       
-            ) : (
-              type === "step2" ? (
-                <>
-                <g id={svg_id} transform="translate(-536 -571)" >
-                <g id="Group_5599" data-name="Group 5599" transform="translate(-5 7)">
-                  <g width="230" id="Rectangle_3512" data-name="Rectangle 3512" transform="translate(541 520)" fill="#141517" stroke="#1993e6" stroke-width="2" onClick={toggleNode}>
-                    <rect width="230" height="94" rx="13" stroke="none"/>
-                    <rect x="1" y="1" width="230" height="92" rx="12" fill="none"/>
-                  </g>
-                  <line id="Line_329" data-name="Line 329" x2="230" transform="translate(542.5 554.5)" fill="none" stroke="#1993e6" stroke-width="2"/>
-                </g>
-                <text id="Dasboard" strokeWidth="0" transform="translate(704 608)" fill="#1993e6" font-size="15" font-family="'Rubik', sans-serif"><tspan x="-20" y="0" stroke='white' onMouseOver={() => handleMouseOver(nodeDatum.name,svg_id)} onMouseOut={() => handleMouseOut(svg_id)} >Read more</tspan></text>
-                <text id="Dasboard-2" strokeWidth="0" data-name="Dasboard" transform="translate(622 553)" fill="#fff" font-size="21" font-family="'Rubik', sans-serif"><tspan x="-10" y="0" stroke='white'>ID : {nodeDatum['id']}</tspan></text>
-                <text id="" strokeWidth="0" transform="translate(546 571)" fill="#fff" font-size="15" font-family="'Rubik', sans-serif"><tspan x="0" y="14" stroke='white'>{shortText}</tspan></text>
-                </g>          
-                {id++}              
-                </>
+          <>
+          <g id={svg_id} transform="translate(-598 -770)" stroke-width="0">
+            <rect id="Rectangle_4292" data-name="Rectangle 4292" width="257" height="135" rx="13" transform="translate(536 713)" fill={backgroundColor}/>
+            <path id="Path_6071" data-name="Path 6071" d="M0,0H257" transform="translate(536 747.5)" fill="none" stroke="#fff" stroke-width="2"/>
+            <text id="textid" stroke-width="0" data-name={nodeDatum.name} transform="translate(546 757)" fill="#fff" font-size="15" font-family="Rubik-Regular, Rubik"><tspan x="0" y="14">{firstLine}</tspan><tspan x="0" y="36">{secondLine} </tspan><tspan x="0" y="58">{thirdLine}</tspan><tspan x="0" y="80">{fourthLine}</tspan></text>
+            {
+              secondData === '' ? (
+                <></>
               ) : (
-              type === "step3" ? (
-                <>
-                  <g id={svg_id} transform="translate(-1266.028 -450.689)" onClick={toggleNode}>
-                    <g id="Rectangle_3715" data-name="Rectangle 3715" transform="translate(1266.028 420.689)" fill="#141517" stroke="#1993e6" stroke-width="2">
-                      <rect width="210" height="73" rx="16" stroke="none"/>
-                      <rect x="1" y="1" width="210" height="71" rx="15" fill="none"/>
-                    </g>
-                    <text id="" strokeWidth="0" transform="translate(1279.461 442.189)" fill="#fff" font-size="15" font-family="'Rubik', sans-serif"><tspan x="0" y="14" stroke='white'>{shortText}</tspan></text>
-                    <text id="Dasboard" strokeWidth="0" transform="translate(1435.714 478.811)" fill="#1993e6" font-size="15" font-family="'Rubik', sans-serif"><tspan x="-50" y="0" stroke='white' onMouseOver={() => handleMouseOver(nodeDatum.name,svg_id)} onMouseOut={() => handleMouseOut(svg_id)}>Read more</tspan></text>
-                  </g>              
-                  {id++}
-                </>
-                ) : (
-                  type === "step4" ? (
-                    <>
-                      <g id="result" transform="translate(-1644 -445)">
-                        <g id="Rectangle_3716" data-name="Rectangle 3716" transform="translate(1644 420)" fill="#141517" stroke="#e50019" stroke-width="2" onClick={toggleNode}>
-                          <rect width="136" height="56" rx="9" stroke="none"/>
-                          <rect x="1" y="1" width="134" height="54" rx="8" fill="none"/>
+                <text id="Dasboard" transform="translate(704 837)" fill="#fff" font-size="15" font-family="Rubik-Regular, Rubik" text-decoration="underline" stroke-width="0"><tspan x="0" y="0" onMouseOver={(e) => handleMouseOver(nodeDatum.name,svg_id,event)} onMouseOut={() => handleMouseOut(svg_id)} >Read more</tspan></text>
+              )
+            }            
+            <text id="Dasboard-2" data-name="Dasboard" transform="translate(546 738)" fill="#fff" font-size="21" font-family="Rubik-Regular, Rubik" stroke-width="0"><tspan x="0" y="0"> {nodeDatum['gid']}</tspan></text>
+            {
+              nodeDatum.children ? (
+                nodeDatum.__rd3t.collapsed ?(
+                  <>
+                    <text id="Dasboard-3" data-name="Dasboard" transform="translate(707 736)" fill="#fff" font-size="15" font-family="Rubik-Regular, Rubik" stroke-width="0" onClick={toggleNode}><tspan x="0" y="0">{nodeDatum.__rd3t.collapsed ? 'Expand' : 'Collapse'}</tspan></text>
+                    <g id="Navigation" transform="translate(765.154 722.395)" onClick={toggleNode}>
+                      <g id="_-Round-_-Navigation-_-arrow_back_ios" data-name="-Round-/-Navigation-/-arrow_back_ios" transform="translate(0 0)">
+                        <g id="Group_277" data-name="Group 277">
+                          <path id="_-Icon-Color" stroke-width="0" data-name="🔹-Icon-Color" d="M.338,16.864a1.145,1.145,0,0,0,1.622,0L9.578,9.247a.913.913,0,0,0,0-1.292L1.96.337A1.147,1.147,0,0,0,.338,1.959L6.974,8.605.329,15.251A1.143,1.143,0,0,0,.338,16.864Z" transform="translate(0 0)" fill="#fff" fill-rule="evenodd"/>
                         </g>
-                        <text id="Dasboard" strokeWidth="0" transform="translate(1683 461)" fill="red" font-size="21" font-family="'Rubik', sans-serif"><tspan x="0" y="-8">{shortText}</tspan></text>
-                      </g>                  
-                    </>
-                  ) : (
-                    <></>
-                  )
+                      </g>
+                    </g>
+                  </>
+                ) : (
+                  <>
+                    <text id="Dasboard-3" data-name="Dasboard" transform="translate(717 736)" fill="#fff" font-size="15" font-family="Rubik-Regular, Rubik" stroke-width="0" onClick={toggleNode}><tspan x="0" y="0">{nodeDatum.__rd3t.collapsed ? 'Expand' : 'Collapse'}</tspan></text>
+                    <g id="Navigation" transform="translate(695.001 720)" onClick={toggleNode}>
+                      <g id="_-Round-_-Navigation-_-arrow_back_ios" data-name="-Round-/-Navigation-/-arrow_back_ios">
+                        <g id="Group_277" data-name="Group 277">
+                          <path id="_-Icon-Color" stroke-width="0" data-name="🔹-Icon-Color" d="M9.508,16.864a1.145,1.145,0,0,1-1.622,0L.268,9.247a.913.913,0,0,1,0-1.292L7.885.337A1.147,1.147,0,0,1,9.508,1.959L2.871,8.605l6.646,6.646A1.143,1.143,0,0,1,9.508,16.864Z" transform="translate(5.727 2.395)" fill="#fff" fill-rule="evenodd"/>
+                        </g>
+                      </g>
+                    </g>            
+                  </>
                 )
-                )    
-            )
+              ) : (
+                <></>
+              )
+            }
+          </g>
+          {id++}
+          </>       
         );
       }
       const styles = {
@@ -105,23 +141,24 @@ const DashTree = () => {
           }
         }
       }  
-      const handleMouseOver = (input,id) => {
+      const handleMouseOver = (input,id,event) => {
         console.log(input);
         console.log(id);
+        setTooltipVisible(true);
         var myicon = document.getElementById(id);
         var mypopup = document.getElementById("mypopup");    
         var iconPos = myicon.getBoundingClientRect();
-        mypopup.style.left = (iconPos.right + 20) + "px";
-        mypopup.style.top = (window.scrollY + iconPos.top - 60) + "px";
+        mypopup.style.left = event.clientX + 20 + "px";
+        mypopup.style.top = event.clientY + 20 + "px";
         mypopup.style.display = "block";    
         document.getElementById("svg_content").innerText = input;
-        setTooltipVisible(true);
       };
+      
       const handleMouseOut = (id) => {
-        setTooltipVisible(false);
         var myicon = document.getElementById(id);
         var mypopup = document.getElementById("mypopup");    
         mypopup.style.display = "none";    
+        setTooltipVisible(false);
       };
       const svgSquare = {
         shape: 'rect',
@@ -130,10 +167,23 @@ const DashTree = () => {
           height: 0,
         }
       }
+      function convertDownstreamToArray(obj) {
+        const { downstream, ...rest } = obj;
+        if (downstream && typeof downstream === "object") {
+          return {
+            ...rest,
+            downstream: [convertDownstreamToArray(downstream)],
+          };
+        }
+        return obj;
+      }
+      function handleLoadMore() {   
+        let children = datas.slice(0,1);
+        const convertedArr = children.map(convertDownstreamToArray);
+        let orgChartString = JSON.stringify(convertedArr);
+        orgChartString = orgChartString.replace(/downstream/g, 'children');
+        children = JSON.parse(orgChartString);
         
-      function handleLoadMore() {
-          
-        let children = datas.children.slice(start,end);
         console.log(children);
         const child = children[start];
         setStart(end);
@@ -141,37 +191,54 @@ const DashTree = () => {
       
         console.log(start);
         console.log(end);
-        setData({"name": "roots","id": "R0001","type": "step1","children": children})        
+        setTreeData(children);
+        setData(children)        
+        setLoadingSpinner(false);
       }
+
       useEffect(() => {
         handleLoadMore();
       }, []);    
               
     return (
       <>
-        <CRow className='bg-lightsy'>
-        <div>
-            <button className='btn btn-primary' onClick={(e)=>handleLoadMore()}>Load Next Data</button>    
-        </div>
-          <CCol xs={12} style={{"height":"1000px"}}>
-          <Tree 
-            data={data} 
-            dimensions={dimensions}
-            renderCustomNodeElement={renderRectSvgNode}
-            orientation="horizontal"        
-            styles={styles}         
-            nodeSvgShape={svgSquare}
-            pathFunc="step"
-            translate={translate}
-            nodeSize={{
-              x: 240,
-              y: 200
-            }}
-            separation={{
-              siblings: 1,
-              nonSiblings: 1
-            }}                          
-          />              
+        <CRow>
+        <CCol xs={12} className="d-flex justify-content-end mb-4 pt-4">
+          <Pagination
+            pageSize={1}
+            items={treedata}
+            onChangePage={onChangePage}
+          />            
+        </CCol>
+          <CCol xs={12} style={{"height":"2800px"}}>
+          {
+            loadingSpinner ? (
+              <div className="d-flex align-items-center justify-content-center" style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
+                <CSpinner component="span" size="lg" aria-hidden="false"/>
+              </div>
+            ) : (
+            <Tree 
+              data={data} 
+              dimensions={dimensions}
+              renderCustomNodeElement={renderRectSvgNode}
+              orientation="horizontal"        
+              styles={styles}       
+              childrenKey="children"  
+              nodeSvgShape={svgSquare}
+              pathFunc="step"
+              zoom={1}       
+              translate={translate}
+              nodeSize={{
+                x: 540,
+                y: 100
+              }}
+              separation={{
+                siblings: 2,
+                nonSiblings: 4
+              }}                          
+            />              
+            )
+          }
             <div id="mypopup">
               <p id="svg_content"></p>
             </div>        

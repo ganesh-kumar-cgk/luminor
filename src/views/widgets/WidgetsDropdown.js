@@ -24,11 +24,11 @@ const WidgetsDropdown = (props) => {
             <>
               {props.data['download_count']}{' '}
               <span className="fs-6 fw-normal">
-                ({props.data['download_count']}% <CIcon icon={cilArrowBottom} />)
+                ({props.data['system_requirements_value']}% <CIcon icon={cilArrowBottom} />)
               </span>
             </>
           }
-          title={props.data['download_label']}
+          title={props.data['system_requirements_label']}
           action={
             <CDropdown alignment="end">
               <CDropdownToggle color="transparent" caret={false} className="p-0">
@@ -109,13 +109,13 @@ const WidgetsDropdown = (props) => {
           color="info"
           value={
             <>
-              {props.data['purchase_count']}{' '}
+              {props.data['system_test_value']}{' '}
               <span className="fs-6 fw-normal">
-                ({props.data['purchase_count']}% <CIcon icon={cilArrowTop} />)
+                ({props.data['system_test_value']}% <CIcon icon={cilArrowTop} />)
               </span>
             </>
           }
-          title={props.data['purchase_label']}
+          title={props.data['system_test_label']}
           action={
             <CDropdown alignment="end">
               <CDropdownToggle color="transparent" caret={false} className="p-0">
@@ -195,13 +195,13 @@ const WidgetsDropdown = (props) => {
           color="warning"
           value={
             <>
-              {props.data['customer_count']}{' '}
+              {props.data['requirements_value']}{' '}
               <span className="fs-6 fw-normal">
-                ({props.data['customer_count']}% <CIcon icon={cilArrowTop} />)
+                ({props.data['requirements_value']}% <CIcon icon={cilArrowTop} />)
               </span>
             </>
           }
-          title={props.data['customer_label']}
+          title={props.data['requirements_label']}
           action={
             <CDropdown alignment="end">
               <CDropdownToggle color="transparent" caret={false} className="p-0">
@@ -268,13 +268,13 @@ const WidgetsDropdown = (props) => {
           color="danger"
           value={
             <>
-              {props.data['channel_count']}{' '}
+              {props.data['test_value']}{' '}
               <span className="fs-6 fw-normal">
-                ({props.data['channel_count']}% <CIcon icon={cilArrowBottom} />)
+                ({props.data['test_value']}% <CIcon icon={cilArrowBottom} />)
               </span>
             </>
           }
-          title={props.data['channel_label']}
+          title={props.data['test_label']}
           action={
             <CDropdown alignment="end">
               <CDropdownToggle color="transparent" caret={false} className="p-0">

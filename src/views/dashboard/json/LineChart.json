@@ -1,0 +1,42 @@
+{
+    "labels": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "Julys"
+    ],
+    "datasets": [
+      {
+        "backgroundColor": "rgba(255, 99, 132, 0.5)",
+        "label": "d 1",
+        "data": [
+          "-500",
+          "-899",
+          "-889",
+          "779",
+          "660",
+          "600",
+          "5"
+        ],
+        "borderColor": "rgb(255, 99, 132)"
+      },
+      {
+        "borderColor": "rgb(53, 162, 235)",
+        "data": [
+          "-21",
+          "-585",
+          "200",
+          "271",
+          "240",
+          "2",
+          "799",
+          "273"
+        ],
+        "label": "d 2",
+        "backgroundColor": "rgba(53, 162, 235, 0.5)"
+      }
+    ]
+  }
