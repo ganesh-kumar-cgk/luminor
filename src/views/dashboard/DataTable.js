@@ -17,6 +17,7 @@ const STORY_HEADERS = [
   {
     prop: "id",
     title: "ID",
+    isSortable : false,
     isFilterable: true
   },
   {

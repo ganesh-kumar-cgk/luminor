@@ -45,3 +45,8 @@
     background-color: #94a4bf;
     border-color: #94a4bf;
 }
+.toprows{
+    background-color: white;
+    position: sticky;
+    top: 105px;    
+}

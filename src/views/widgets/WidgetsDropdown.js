@@ -1,4 +1,4 @@
-import React from 'react'
+import {React,useState} from 'react'
 import {
   CRow,
   CCol,
@@ -12,23 +12,32 @@ import { getStyle } from '@coreui/utils'
 import { CChartBar, CChartLine } from '@coreui/react-chartjs'
 import CIcon from '@coreui/icons-react'
 import { cilArrowBottom, cilArrowTop, cilOptions } from '@coreui/icons'
+import widget1 from '../dashboard/json/widgets/widget1.json'
+import widget2 from '../dashboard/json/widgets/widget2.json'
+import widget3 from '../dashboard/json/widgets/widget3.json'
+import widget4 from '../dashboard/json/widgets/widget4.json'
 
 const WidgetsDropdown = (props) => {
+  const [widget1Data, setWidget1Data] = useState(widget1);
+  const [widget2Data, setWidget2Data] = useState(widget2);
+  const [widget3Data, setWidget3Data] = useState(widget3);
+  const [widget4Data, setWidget4Data] = useState(widget4);
+
   return (
-    <CRow>
+    <CRow className='pt-4'>
       <CCol sm={6} lg={3}>
         <CWidgetStatsA
           className="mb-4"
           color="primary"
           value={
             <>
-              {props.data['download_count']}{' '}
+              {widget1['system_requirements_value']}{' '}
               <span className="fs-6 fw-normal">
-                ({props.data['system_requirements_value']}% <CIcon icon={cilArrowBottom} />)
+                ({widget1['system_requirements_value']}% <CIcon icon={cilArrowBottom} />)
               </span>
             </>
           }
-          title={props.data['system_requirements_label']}
+          title={widget1['system_requirements_label']}
           action={
             <CDropdown alignment="end">
               <CDropdownToggle color="transparent" caret={false} className="p-0">
@@ -46,18 +55,7 @@ const WidgetsDropdown = (props) => {
             <CChartLine
               className="mt-3 mx-3"
               style={{ height: '70px' }}
-              data={{
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [
-                  {
-                    label: 'My First dataset',
-                    backgroundColor: 'transparent',
-                    borderColor: 'rgba(255,255,255,.55)',
-                    pointBackgroundColor: getStyle('--cui-primary'),
-                    data: [65, 59, 84, 84, 51, 55, 40],
-                  },
-                ],
-              }}
+              data={widget1Data}
               options={{
                 plugins: {
                   legend: {
@@ -109,13 +107,13 @@ const WidgetsDropdown = (props) => {
           color="info"
           value={
             <>
-              {props.data['system_test_value']}{' '}
+              {widget2['system_test_value']}{' '}
               <span className="fs-6 fw-normal">
-                ({props.data['system_test_value']}% <CIcon icon={cilArrowTop} />)
+                ({widget2['system_test_value']}% <CIcon icon={cilArrowTop} />)
               </span>
             </>
           }
-          title={props.data['system_test_label']}
+          title={widget2['system_test_label']}
           action={
             <CDropdown alignment="end">
               <CDropdownToggle color="transparent" caret={false} className="p-0">
@@ -133,18 +131,7 @@ const WidgetsDropdown = (props) => {
             <CChartLine
               className="mt-3 mx-3"
               style={{ height: '70px' }}
-              data={{
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [
-                  {
-                    label: 'My First dataset',
-                    backgroundColor: 'transparent',
-                    borderColor: 'rgba(255,255,255,.55)',
-                    pointBackgroundColor: getStyle('--cui-info'),
-                    data: [1, 18, 9, 17, 34, 22, 11],
-                  },
-                ],
-              }}
+              data={widget2Data}
               options={{
                 plugins: {
                   legend: {
@@ -195,13 +182,13 @@ const WidgetsDropdown = (props) => {
           color="warning"
           value={
             <>
-              {props.data['requirements_value']}{' '}
+              {widget3['requirements_value']}{' '}
               <span className="fs-6 fw-normal">
-                ({props.data['requirements_value']}% <CIcon icon={cilArrowTop} />)
+                ({widget3['requirements_value']}% <CIcon icon={cilArrowTop} />)
               </span>
             </>
           }
-          title={props.data['requirements_label']}
+          title={widget3['requirements_label']}
           action={
             <CDropdown alignment="end">
               <CDropdownToggle color="transparent" caret={false} className="p-0">
@@ -219,18 +206,7 @@ const WidgetsDropdown = (props) => {
             <CChartLine
               className="mt-3"
               style={{ height: '70px' }}
-              data={{
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [
-                  {
-                    label: 'My First dataset',
-                    backgroundColor: 'rgba(255,255,255,.2)',
-                    borderColor: 'rgba(255,255,255,.55)',
-                    data: [78, 81, 80, 45, 34, 12, 40],
-                    fill: true,
-                  },
-                ],
-              }}
+              data={widget3Data}
               options={{
                 plugins: {
                   legend: {
@@ -268,13 +244,13 @@ const WidgetsDropdown = (props) => {
           color="danger"
           value={
             <>
-              {props.data['test_value']}{' '}
+              {widget4['test_value']}{' '}
               <span className="fs-6 fw-normal">
-                ({props.data['test_value']}% <CIcon icon={cilArrowBottom} />)
+                ({widget4['test_value']}% <CIcon icon={cilArrowBottom} />)
               </span>
             </>
           }
-          title={props.data['test_label']}
+          title={widget4['test_label']}
           action={
             <CDropdown alignment="end">
               <CDropdownToggle color="transparent" caret={false} className="p-0">
@@ -292,35 +268,7 @@ const WidgetsDropdown = (props) => {
             <CChartBar
               className="mt-3 mx-3"
               style={{ height: '70px' }}
-              data={{
-                labels: [
-                  'January',
-                  'February',
-                  'March',
-                  'April',
-                  'May',
-                  'June',
-                  'July',
-                  'August',
-                  'September',
-                  'October',
-                  'November',
-                  'December',
-                  'January',
-                  'February',
-                  'March',
-                  'April',
-                ],
-                datasets: [
-                  {
-                    label: 'My First dataset',
-                    backgroundColor: 'rgba(255,255,255,.2)',
-                    borderColor: 'rgba(255,255,255,.55)',
-                    data: [78, 81, 80, 45, 34, 12, 40, 85, 65, 23, 12, 98, 34, 84, 67, 82],
-                    barPercentage: 0.6,
-                  },
-                ],
-              }}
+              data={widget4Data}
               options={{
                 maintainAspectRatio: false,
                 plugins: {

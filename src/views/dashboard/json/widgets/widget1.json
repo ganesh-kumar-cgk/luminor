@@ -1,0 +1,14 @@
+{
+    "system_requirements_label": "System Requirements",
+    "system_requirements_value": "12.7",
+    "labels": ["January", "February", "March", "April", "May", "June", "July"],
+    "datasets": [
+      {
+        "label": "My First dataset",
+        "backgroundColor": "transparent",
+        "borderColor": "rgba(255,255,255,.55)",
+        "pointBackgroundColor": "blue",
+        "data": [65, 59, 84, 84, 51, 55, 40]
+      }
+    ]
+  }

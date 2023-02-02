@@ -2,16 +2,6 @@ import React,{useState,useEffect} from 'react'
 import { CCard, CCardBody, CCol, CCardHeader, CRow } from '@coreui/react'
 import './style.css';
 import {
-  CTable,
-  CTableBody,
-  CTableCaption,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-  CTooltip,
-} from '@coreui/react'
-import {
   CChartBar,
   CChartDoughnut,
   CChartLine,
@@ -20,24 +10,21 @@ import {
   CChartRadar,
 } from '@coreui/react-chartjs'
 import WidgetsDropdown from '../widgets/WidgetsDropdown'
-import whatsTodaySection from './json/whatstoday.json'
 import lineChart from './json/LineChart.json'
 import HorizonatlChart from './json/HorizontalBarChart.json'
 import VerticalChart from './json/VerticalChart.json';
 import DataTable from './DataTable';
-import TableData from './json/TableData.json'
 
 const Dashboard = () => {
   let [lineData, setLineData] = useState(lineChart);  
   let [horizontalBarData, setHorizontalBarData] = useState(HorizonatlChart);  
-  let [whatsToday, setWhatsToday] = useState(whatsTodaySection);  
   let [verticalBarData, setVerticalBarData] = useState(VerticalChart);  
 
   useEffect(() => {
    }, []);    
   return (
     <>
-      <WidgetsDropdown data={whatsToday} />
+      <WidgetsDropdown />
       <CRow>
         <CCol xs={12} lg={4} className="">
           <CCard className="mb-4 bg-body">
