@@ -36,8 +36,9 @@ const DashTree = () => {
       }, 500);                
     };    
     const renderRectSvgNode = ({ nodeDatum, toggleNode }) => {
+      try{
         let desc = nodeDatum.description;
-        console.log(nodeDatum);
+        desc = desc.replace(/&nbsp;/g, '');
         let stripped = desc.replace(/(<([^>]+)>)/ig, " ");      
         let shortText = stripped.substring(0, 140);
         let firstLine = shortText.substring(0, 40);
@@ -98,8 +99,8 @@ const DashTree = () => {
               nodeDatum.children ? (
                 nodeDatum.__rd3t.collapsed ?(
                   <>
-                    <text id="Dasboard-4" data-name="Dasboard" transform="translate(1485 906)" fill="#fff" font-size="15" font-family="Rubik-Regular, Rubik" strokeWidth={0} onClick={toggleNode}><tspan x="0" y="0">{nodeDatum.__rd3t.collapsed ? 'Expand' : 'Collapse'}</tspan></text>
-                    <g id="Icons" transform="translate(1554 909.582) rotate(180)">
+                    <text id="Dasboard-4" data-name="Dasboard" transform="translate(1485 906)" fill="#fff" font-size="15" font-family="Rubik-Regular, Rubik" strokeWidth={0} onClick={toggleNode}><tspan x="0" y="10">{nodeDatum.__rd3t.collapsed ? 'Expand' : 'Collapse'}</tspan></text>
+                    <g id="Icons" transform="translate(1554 919.582) rotate(180)">
                       <g id="Rounded" transform="translate(-6 -2.418)">
                         <g id="Navigation" transform="translate(0 0)">
                           <g id="_-Round-_-Navigation-_-arrow_back_ios" data-name="-Round-/-Navigation-/-arrow_back_ios" transform="translate(0 0)">
@@ -114,8 +115,8 @@ const DashTree = () => {
                   </>
                 ) : (
                   <>
-                    <text id="Dasboard-4" data-name="Dasboard" transform="translate(1497 906)" fill="#fff" font-size="15" font-family="Rubik-Regular, Rubik" strokeWidth={0} onClick={toggleNode}><tspan x="0" y="0">{nodeDatum.__rd3t.collapsed ? 'Expand' : 'Collapse'}</tspan></text>                  
-                    <g id="Icons" transform="translate(1475.001 890.001)" onClick={toggleNode}>
+                    <text id="Dasboard-4" data-name="Dasboard" transform="translate(1497 906)" fill="#fff" font-size="15" font-family="Rubik-Regular, Rubik" strokeWidth={0} onClick={toggleNode}><tspan x="0" y="10">{nodeDatum.__rd3t.collapsed ? 'Expand' : 'Collapse'}</tspan></text>                  
+                    <g id="Icons" transform="translate(1475.001 900.001)" onClick={toggleNode}>
                       <g id="Rounded" transform="translate(0 0)">
                         <g id="Navigation" transform="translate(0)">
                           <g id="_-Round-_-Navigation-_-arrow_back_ios" data-name="-Round-/-Navigation-/-arrow_back_ios">
@@ -137,6 +138,10 @@ const DashTree = () => {
           {id++}
           </>       
         );
+      }
+      catch(e){
+        console.log(e);        
+      }
     }
     const styles = {
       nodes: {
