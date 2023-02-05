@@ -18,6 +18,8 @@ const DashboardTree = () => {
     const [searchResult, setSearchResult] = useState([]);
     const [beforeSearch, setBeforeSearch] = useState([]);
     const [searchButton, setSearchButton] = useState(true);
+    let [ledger, setLedger] = useState([]);
+    let uniqueNames = new Set();
     let id = 0;
     const onChangePage = (pageOfItems,startIndex,endIndex) => {
       setStart(endIndex);
@@ -27,6 +29,7 @@ const DashboardTree = () => {
       orgChartString = orgChartString.replace(/downstream/g, 'children');
       pageOfItems = JSON.parse(orgChartString);
       setData({"name": treedata['name'],"gid": treedata['gid'],"type": treedata['itemtype'],"description":treedata['description'],"projectname":treedata['projectname'],"itemid":treedata['itemid'],"project": treedata['project'],"children": pageOfItems})    
+      getLeadgers(pageOfItems);
       setTimeout(() => {
         setLoadingSpinner(false);
       }, 500);                
@@ -193,6 +196,7 @@ const DashboardTree = () => {
       setEnd(end + 40);
     
       setData({"name": treedata['name'],"gid": treedata['gid'],"type": treedata['itemtype'],"description":treedata['description'],"projectname":treedata['projectname'],"itemid":treedata['itemid'],"project": treedata['project'],"children": children})        
+      getLeadgers(children);
       setLoadingSpinner(false);
     }
     const handleChange = e => {
@@ -218,6 +222,7 @@ const DashboardTree = () => {
           setEnd(end + 40);
         
           setData({"name": "roots","gid": "R0001","itemtype": "step1","description":"Description","projectname":"project name","itemid":"itemid","project": "project","children": children})            
+          getLeadgers(children);
         } else {
           setLoadingSpinner(false);            
           alert("File reading failed");
@@ -225,22 +230,22 @@ const DashboardTree = () => {
       };
     };
     const searchData = e => {
-      const search = (data, name) => {
-        return data.filter(item => {
-          if (item.itemid === name) {
-            return true;
-          } else if (item.downstream) {
-            return search(item.downstream, name).length > 0;
-          } else {
-            return false;
-          }
-        });
-      };
-      const result = search(data['children'], searchResult);
-      setBeforeSearch(data);
-      setData({"name": data['name'],"gid": data['gid'],"type": data['itemtype'],"description":data['description'],"projectname":data['projectname'],"itemid":data['itemid'],"project": data['project'],"children": result})
-      setSearchButton(false);
-      console.log(result);
+      // const search = (data, name) => {
+      //   return data.filter(item => {
+      //     if (item.itemid === name) {
+      //       return true;
+      //     } else if (item.downstream) {
+      //       return search(item.downstream, name).length > 0;
+      //     } else {
+      //       return false;
+      //     }
+      //   });
+      // };
+      // const result = search(data['children'], searchResult);
+      // setBeforeSearch(data);
+      // setData({"name": data['name'],"gid": data['gid'],"type": data['itemtype'],"description":data['description'],"projectname":data['projectname'],"itemid":data['itemid'],"project": data['project'],"children": result})
+      // setSearchButton(false);
+      // console.log(result);
     }
     const searchClear = e => {
       setSearchButton(true);
@@ -256,7 +261,17 @@ const DashboardTree = () => {
       const newScale = 0.3;
       svgElement.setAttribute("transform", `translate(${newTranslateX},${newTranslateY}) scale(${newScale})`);
     }
-    useEffect(() => {
+    const getLeadgers = arr => {
+      arr.forEach(item => {
+        uniqueNames.add(item.itemtypename);
+        if (item.children) {
+          getLeadgers(item.children);
+        }
+      });
+      setLedger(Array.from(uniqueNames))
+//      return Array.from(uniqueNames);
+    };    
+    useEffect(() => { 
       handleLoadMore();
     }, []);    
               
@@ -267,8 +282,8 @@ const DashboardTree = () => {
             <input type="file" accept=".json" className='form-control' onChange={handleChange} />
           </CCol>        
           <CCol xs={6} lg={3} className="d-flex justify-content-end mb-4 pt-4">
-            <button className='center-colors' onClick={centerData}>Center</button>&nbsp;
-            <div className="input-group">
+            <button className='center-color' onClick={centerData}>Center</button>&nbsp;
+            {/* <div className="input-group">
               <input type="text" className="form-control" onChange={e => setSearchResult(e.target.value)} placeholder="Search Item Id" aria-label="Search Item Id" aria-describedby="button-addon2" autocomplete="off"/>
               {
                 searchButton ? (
@@ -277,7 +292,7 @@ const DashboardTree = () => {
                   <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={searchClear}>Clear</button>
                 )
               }
-            </div>            
+            </div>             */}
           </CCol>                  
           <CCol xs={12} lg={6} className="d-flex justify-content-end mb-4 pt-4">
             <Pagination
@@ -285,6 +300,17 @@ const DashboardTree = () => {
               items={treedata['downstream']}
               onChangePage={onChangePage}
             />            
+          </CCol>
+        </CRow>
+        <CRow>
+          <CCol xs={12} lg={6} className="pt-2">
+            <div id='leadger'>leadgers
+            <ul className="list-group list-group-horizontal position-relative overflow-auto w-75">
+             {ledger.map(itemtypename => (
+              <li className="list-group-item" key={itemtypename}>{itemtypename}</li>
+            ))}            
+              </ul>            
+            </div>
           </CCol>
         </CRow>
         <CRow>
