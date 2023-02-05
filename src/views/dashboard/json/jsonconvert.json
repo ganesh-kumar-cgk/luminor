@@ -1,51 +1,51 @@
 [
     {
-        "id":1,
+        "itemid":1,
         "name":"test1",
         "downstream":
         {
-            "id":2,
-            "name":"test1",
+            "itemid":2,
+            "name":"test2",
             "downstream":
             {
-                "id":3,
-                "name":"test1"      
+                "itemid":3,
+                "name":"test3"      
             }
         }
     },
     {
-        "id":1,
-        "name":"test1",
+        "itemid":1,
+        "name":"test1-2",
         "downstream":
         {
-            "id":2,
-            "name":"test1",
+            "itemid":2,
+            "name":"test2-2",
             "downstream":
             {
-                "id":4,
-                "name":"test1"      
+                "itemid":4,
+                "name":"test4-2"      
             }
         }
     },
     {
-        "id":1,
-        "name":"test1",
+        "itemid":1,
+        "name":"test1-3",
         "downstream":
         {
-            "id":2,
-            "name":"test1",
+            "itemid":2,
+            "name":"test2-3",
             "downstream":
             {
-                "id":3,
-                "name":"test1",   
+                "itemid":3,
+                "name":"test3-3",   
                 "downstream":
                 {
-                    "id":5,
-                    "name":"test1",
+                    "itemid":5,
+                    "name":"test5-3",
                     "downstream":
                     {
-                        "id":6,
-                        "name":"test1"      
+                        "itemid":6,
+                        "name":"test6-3"      
                     }
                 }
             }

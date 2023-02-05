@@ -8,33 +8,53 @@ const JsonConvert = () => {
     const [end, setEnd] = useState(40);
     const [loadingSpinner, setLoadingSpinner] = useState(false);
     function handleLoadMore() {   
-        let newJSON = [];
-        let map = new Map();
-      
-        for (let obj of treedata) {
-          let curr = map.get(obj.id);
-          if (!curr) {
-            curr = { "id": obj.id, "name": obj.name,"project": obj.project,"projectname":obj.projectname,"itemtype":obj.itemtype,"itemtypename":obj.itemtypename,"itemid":obj.itemid,"gid":obj.gid,"description":obj.description, "downstream": [] };
-            map.set(obj.id, curr);
+      convert(treedata);
+    }
+    function convert(data){
+      let newJSON = [];
+      let map = new Map();
+      for (const obj of data) {
+        if (!map.has(obj.itemid)) {
+            const curr = {
+                "name": obj.name,
+                "project": obj.project,
+                "projectname":obj.projectname,
+                "itemtype":obj.itemtype,
+                "itemtypename":obj.itemtypename,
+                "itemid":obj.itemid,
+                "gid":obj.gid,
+                "description":obj.description,                  
+                "downstream": []
+            };
+            map.set(obj.itemid, curr);
             newJSON.push(curr);
-          }
-      
-          let downstream = obj.downstream;
-          let parent = curr;
-          while (downstream) {
-            let next = parent.downstream.find(d => d.id === downstream.id);
+        }
+    
+        let downstream = obj.downstream;
+        let parent = map.get(obj.itemid);
+        while (downstream) {
+            let next = parent.downstream.find(d => d.itemid === downstream.itemid);
             if (!next) {
-              next = { "id": downstream.id, "name": downstream.name,"project": obj.project,"projectname":obj.projectname,"itemtype":obj.itemtype,"itemtypename":obj.itemtypename,"itemid":obj.itemid,"gid":obj.gid,"description":obj.description, "downstream": [] };
-              parent.downstream.push(next);
+                next = {
+                    "name": downstream.name,
+                    "project": downstream.project,
+                    "projectname":downstream.projectname,
+                    "itemtype":downstream.itemtype,
+                    "itemtypename":downstream.itemtypename,
+                    "itemid":downstream.itemid,
+                    "gid":downstream.gid,
+                    "description":downstream.description,                      
+                    "downstream": []
+                };
+                parent.downstream.push(next);
             }
             parent = next;
             downstream = downstream.downstream;
-          }
         }
-        console.log(newJSON);
-        document.getElementById('print').innerText = JSON.stringify(newJSON, null, 2);
-
       }
+      console.log(newJSON);
+      document.getElementById('print').innerText = JSON.stringify(newJSON, null, 2);
+    }
     const handleChange = e => {
       console.log("changed");
       const fileReader = new FileReader();
@@ -46,31 +66,7 @@ const JsonConvert = () => {
           let val = e.target.result;
           val = JSON.parse(val);
           console.log(val);
-          let newJSON = [];
-          let map = new Map();
-        
-          for (let obj of val) {
-            let curr = map.get(obj.id);
-            if (!curr) {
-              curr = { "id": obj.id, "name": obj.name,"project": obj.project,"projectname":obj.projectname,"itemtype":obj.itemtype,"itemtypename":obj.itemtypename,"itemid":obj.itemid,"gid":obj.gid,"description":obj.description, "downstream": [] };
-              map.set(obj.id, curr);
-              newJSON.push(curr);
-            }
-        
-            let downstream = obj.downstream;
-            let parent = curr;
-            while (downstream) {
-              let next = parent.downstream.find(d => d.id === downstream.id);
-              if (!next) {
-                next = { "id": downstream.id, "name": downstream.name,"project": obj.project,"projectname":obj.projectname,"itemtype":obj.itemtype,"itemtypename":obj.itemtypename,"itemid":obj.itemid,"gid":obj.gid,"description":obj.description, "downstream": [] };
-                parent.downstream.push(next);
-              }
-              parent = next;
-              downstream = downstream.downstream;
-            }
-          }
-          console.log(newJSON);
-          document.getElementById('print').innerText = JSON.stringify(newJSON, null, 2);
+          convert(val);
         } else {
           setLoadingSpinner(false);            
           alert("File reading failed");

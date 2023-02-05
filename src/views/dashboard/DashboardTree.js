@@ -6,6 +6,7 @@ import './style.css';
 import treedata from './json/treearray.json'
 import Pagination from "./Pagination/Pagination";
 
+
 const DashboardTree = () => {
     const [data, setData] = useState({"name": treedata['name'],"gid": treedata['gid'],"type": treedata['itemtype'],"description":treedata['description'],"projectname":treedata['projectname'],"itemid":treedata['itemid'],"project": treedata['project'],"children": []});
     const [datas, setDatas] = useState(treedata);    
@@ -14,6 +15,9 @@ const DashboardTree = () => {
     const [tooltip, setTooltipVisible] = useState(false);
     const [dimensions, translate, containerRef] = useCenteredTree();    
     const [loadingSpinner, setLoadingSpinner] = useState(true);
+    const [searchResult, setSearchResult] = useState([]);
+    const [beforeSearch, setBeforeSearch] = useState([]);
+    const [searchButton, setSearchButton] = useState(true);
     let id = 0;
     const onChangePage = (pageOfItems,startIndex,endIndex) => {
       setStart(endIndex);
@@ -85,8 +89,8 @@ const DashboardTree = () => {
                 <text id="Dasboard" transform="translate(1384 1020)" fill="#fff" font-size="15" font-family="Rubik-Regular, Rubik" text-decoration="underline" strokeWidth={0} onMouseOver={(e) => handleMouseOver(nodeDatum.description,svg_id,event)} onMouseOut={() => handleMouseOut(svg_id)} ><tspan x="100" y="0">Read more</tspan></text>
                 )
             }                   
-              <text id="Dasboard-2" data-name="Dasboard" transform="translate(1283 891)" fill="#fff" font-size="15" font-family="Rubik-Medium, Rubik" font-weight="500" strokeWidth={0}><a href={link} target={"_blank"}><tspan x="0" y="0">{nodeDatum.projectname}</tspan></a></text>
-              <text id="Dasboard-3" data-name="Dasboard" transform="translate(1283 921)" fill="#fff" font-size="21" font-family="Rubik-Regular, Rubik" strokeWidth={0}><tspan x="0" y="0">{nodeDatum['gid']}</tspan></text>
+              <text id="Dasboard-2" data-name="Dasboard" transform="translate(1283 891)" fill="#fff" font-size="15" font-family="Rubik-Medium, Rubik" font-weight="500" strokeWidth={0}><tspan x="0" y="0">{nodeDatum.projectname}</tspan></text>
+              <text id="Dasboard-3" data-name="Dasboard" transform="translate(1283 921)" fill="#fff" font-size="21" font-family="Rubik-Regular, Rubik" strokeWidth={0}><a href={link} target={"_blank"}><tspan x="0" y="0">{nodeDatum['gid']}</tspan></a></text>
               {
               nodeDatum.children ? (
                 nodeDatum.__rd3t.collapsed ?(
@@ -220,6 +224,38 @@ const DashboardTree = () => {
         }          
       };
     };
+    const searchData = e => {
+      const search = (data, name) => {
+        return data.filter(item => {
+          if (item.itemid === name) {
+            return true;
+          } else if (item.downstream) {
+            return search(item.downstream, name).length > 0;
+          } else {
+            return false;
+          }
+        });
+      };
+      const result = search(data['children'], searchResult);
+      setBeforeSearch(data);
+      setData({"name": data['name'],"gid": data['gid'],"type": data['itemtype'],"description":data['description'],"projectname":data['projectname'],"itemid":data['itemid'],"project": data['project'],"children": result})
+      setSearchButton(false);
+      console.log(result);
+    }
+    const searchClear = e => {
+      setSearchButton(true);
+      setSearchResult([]);
+      setData(beforeSearch);
+    }
+    const centerData = () => {
+      const svgElement = document.querySelector(".rd3t-g");
+      const transformAttr = svgElement.getAttribute("transform");
+      const [translateX, translateY, , scale] = transformAttr.match(/translate\((\d+.\d+),(\d+.\d+)\) scale\((\d+.\d+)\)/);
+      const newTranslateX = 250;
+      const newTranslateY = 250;
+      const newScale = 0.3;
+      svgElement.setAttribute("transform", `translate(${newTranslateX},${newTranslateY}) scale(${newScale})`);
+    }
     useEffect(() => {
       handleLoadMore();
     }, []);    
@@ -227,10 +263,23 @@ const DashboardTree = () => {
     return (
       <>
         <CRow className='toprows'>
-          <CCol xs={12} lg={3} className="d-flex justify-content-end mb-4 pt-4">
+          <CCol xs={6} lg={3} className="d-flex justify-content-end mb-4 pt-4">
             <input type="file" accept=".json" className='form-control' onChange={handleChange} />
           </CCol>        
-          <CCol xs={12} lg={9} className="d-flex justify-content-end mb-4 pt-4">
+          <CCol xs={6} lg={3} className="d-flex justify-content-end mb-4 pt-4">
+            <button className='center-colors' onClick={centerData}>Center</button>&nbsp;
+            <div className="input-group">
+              <input type="text" className="form-control" onChange={e => setSearchResult(e.target.value)} placeholder="Search Item Id" aria-label="Search Item Id" aria-describedby="button-addon2" autocomplete="off"/>
+              {
+                searchButton ? (
+                  <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={searchData}>Search</button>
+                ) : (
+                  <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={searchClear}>Clear</button>
+                )
+              }
+            </div>            
+          </CCol>                  
+          <CCol xs={12} lg={6} className="d-flex justify-content-end mb-4 pt-4">
             <Pagination
               pageSize={40}
               items={treedata['downstream']}

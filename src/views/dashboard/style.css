@@ -50,3 +50,19 @@
     position: sticky;
     top: 105px;    
 }
+.center-color{
+    background-color: #6a829a;
+    border-color: #6a829a;    
+    color: white;
+    width: 100px;
+    border-radius: 15px;    
+}
+.center-colors{
+    background-color: #6a829a;
+    border-color: #6a829a;    
+    color: white;
+    width: 100px;
+    border-radius: 15px;    
+    width: 60px;
+    height: 40px;    
+}
