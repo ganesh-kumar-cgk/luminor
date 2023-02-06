@@ -18,6 +18,7 @@ const DashboardTree = () => {
     const [searchResult, setSearchResult] = useState([]);
     const [beforeSearch, setBeforeSearch] = useState([]);
     const [searchButton, setSearchButton] = useState(true);
+    const [nodeColors, setNodeColors] = useState([{"value":1,"color":"#00973d"},{"value":2,"color":"#F56457"},{"value":3,"color":"#7E1470"},{"value":4,"color":"#3245BF"},{"value":5,"color":"#5D6E1E"},{"value":6,"color":"#BD3B1B"},{"value":7,"color":"#E83845"}])
     let [ledger, setLedger] = useState([]);
     let uniqueNames = new Set();
     let id = 0;
@@ -36,7 +37,7 @@ const DashboardTree = () => {
     };    
     const renderRectSvgNode = ({ nodeDatum, toggleNode }) => {
       try{
-        let desc = nodeDatum.description;
+        let desc = nodeDatum.name;
         desc = desc.replace(/&nbsp;/g, '');      
         let stripped = desc.replace(/(<([^>]+)>)/ig, " ");      
         let shortText = stripped.substring(0, 140);
@@ -46,43 +47,36 @@ const DashboardTree = () => {
         let fourthLine = shortText.substring(120, 140);        
         let secondData = '';
         let backgroundColor = '';
-        if(nodeDatum.itemtype === 1){
-          backgroundColor = "#00973d";
-        }
-        else if(nodeDatum.itemtype === 2){
-          backgroundColor = "#F56457";
-        }
-        else if(nodeDatum.itemtype === 3){
-          backgroundColor = "#7E1470";
-        }
-        else if(nodeDatum.itemtype === 4){
-          backgroundColor = "#3245BF";
-        }
-        else if(nodeDatum.itemtype === 5){
-          backgroundColor = "#5D6E1E";
-        }
-        else if(nodeDatum.itemtype === 6){
-          backgroundColor = "#BD3B1B";
-        }
-        else if(nodeDatum.itemtype === 7){
-          backgroundColor = "#E83845";
-        }
-        else {
-          backgroundColor = "#012F63";
-        }                        
         if(fourthLine === ''){
           secondData = '';
         }
         else{
           secondData = fourthLine + '...';
         }
+        if(nodeDatum.__rd3t.depth === 0){
+          backgroundColor = '#012F63'
+        }
+        else{
+          const targetNodeColor = nodeColors.find(nodeColor => nodeColor.value === nodeDatum.itemtype);
+          if (targetNodeColor) {
+            backgroundColor = targetNodeColor.color
+          } else {
+            console.log("No node color found with value " + itemtype);
+          }        
+        }
         shortText = shortText + '...'
         let link = "https://google.com/item/" + nodeDatum.itemid + "/?projectid=" + nodeDatum.gid;
         let svg_id = "svg_id"+id;
         return (
           <>
-            <g id={svg_id}  transform="translate(-1273 -950)">
-              <rect id="Rectangle_4299" data-name="Rectangle 4299" width="296" height="162" rx="13" transform="translate(1273 870)" strokeWidth={0} fill={backgroundColor}/>
+            <g transform="translate(-1273 -950)">
+              <rect id={svg_id} data-hidden-value={nodeDatum.gid} data-name="Rectangle 4299" width="296" height="162" rx="13" transform="translate(1273 870)" strokeWidth={0} fill={backgroundColor}  style={{
+                stroke:  searchResult === nodeDatum.gid ? 'black' : '',
+                strokeWidth:  searchResult === nodeDatum.gid ? 10 : '',
+                strokeDasharray:  searchResult === nodeDatum.gid ? '5, 5' : '',
+                strokeDashoffset:  searchResult === nodeDatum.gid ? 100 : '',
+                animation: searchResult === nodeDatum.gid ? 'dash 5s linear infinite' : ''
+              }}/>
               <path id="Path_6080" data-name="Path 6080" d="M0,0H296" transform="translate(1273 930.5)" fill="none" stroke="#fff" stroke-width="2"/>
               <text id="" data-name="" transform="translate(1283 940)" fill="#fff" font-size="15" font-family="Rubik-Regular, Rubik" strokeWidth={0}><tspan x="0" y="14">{firstLine}</tspan><tspan x="0" y="36">{secondLine} </tspan><tspan x="0" y="58">{thirdLine}</tspan><tspan x="0" y="80">{fourthLine}</tspan></text>
               {
@@ -230,9 +224,26 @@ const DashboardTree = () => {
       };
     };
     const searchData = e => {
+      const gElements = document.querySelectorAll('rect[data-hidden-value]');
+
+      gElements.forEach((gElement) => {
+        const id = gElement.getAttribute('id');
+        const hiddenValue = gElement.getAttribute('data-hidden-value');
+        if(searchResult === hiddenValue){
+          console.log(id);
+          document.getElementById(id).style.stroke = 'black';
+          document.getElementById(id).style.strokeWidth = '10px';
+          document.getElementById(id).style.strokeDasharray = '5,5';                    
+          document.getElementById(id).style.strokeDashoffset = 100;          
+          document.getElementById(id).style.animation = 'dash 5s linear infinite';          
+          console.log(hiddenValue);
+        }
+      });
+       setSearchButton(false);      
+      
       // const search = (data, name) => {
       //   return data.filter(item => {
-      //     if (item.itemid === name) {
+      //     if (item.gid === name) {
       //       return true;
       //     } else if (item.downstream) {
       //       return search(item.downstream, name).length > 0;
@@ -262,8 +273,8 @@ const DashboardTree = () => {
       svgElement.setAttribute("transform", `translate(${newTranslateX},${newTranslateY}) scale(${newScale})`);
     }
     const getLeadgers = arr => {
-      arr.forEach(item => {
-        uniqueNames.add(item.itemtypename);
+      arr.forEach(item => {        
+        uniqueNames.add(item.itemtype);
         if (item.children) {
           getLeadgers(item.children);
         }
@@ -283,16 +294,16 @@ const DashboardTree = () => {
           </CCol>        
           <CCol xs={6} lg={3} className="d-flex justify-content-end mb-4 pt-4">
             <button className='center-color' onClick={centerData}>Center</button>&nbsp;
-            {/* <div className="input-group">
-              <input type="text" className="form-control" onChange={e => setSearchResult(e.target.value)} placeholder="Search Item Id" aria-label="Search Item Id" aria-describedby="button-addon2" autocomplete="off"/>
-              {
+            <div className="input-group">
+              <input type="text" className="form-control" onChange={e => setSearchResult(e.target.value)} placeholder="Search..." aria-label="Search Item Id" aria-describedby="button-addon2" autocomplete="off"/>
+              {/* {
                 searchButton ? (
                   <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={searchData}>Search</button>
                 ) : (
                   <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={searchClear}>Clear</button>
                 )
-              }
-            </div>             */}
+              } */}
+            </div>            
           </CCol>                  
           <CCol xs={12} lg={6} className="d-flex justify-content-end mb-4 pt-4">
             <Pagination
@@ -304,12 +315,27 @@ const DashboardTree = () => {
         </CRow>
         <CRow>
           <CCol xs={12} lg={6} className="pt-2">
-            <div id='leadger'>leadgers
-            <ul className="list-group list-group-horizontal position-relative overflow-auto w-75">
-             {ledger.map(itemtypename => (
-              <li className="list-group-item" key={itemtypename}>{itemtypename}</li>
-            ))}            
-              </ul>            
+            <div id='leadger' className='floatleft'>
+            <div className='my-legend'>
+                <div className='legend-scale'>
+                  <ul className='legend-labels'>
+                  {ledger.map(itemtype => {
+                    const targetNodeColor = nodeColors.find(nodeColor => nodeColor.value === itemtype);
+                    if (targetNodeColor) {
+                      console.log(targetNodeColor.color);
+                    } else {
+                      console.log("No node color found with value " + itemtype);
+                    }
+                    return (                       
+                      <li key={itemtype.itemtype}>
+                        <span style={{backgroundColor: targetNodeColor.color, marginRight: "20px", marginBottom: "5px"}}></span>
+                        <lum style={{marginBottom: "5px"}}>{itemtype}</lum>
+                      </li>
+                    );
+                  })}
+                  </ul>
+                </div>
+              </div>            
             </div>
           </CCol>
         </CRow>
