@@ -1,131 +1,65 @@
 [
     {
-        "itemid":1,
-        "name":"test1",
-        "itemtypename" : "Heading Item Type",
-        "downstream":
+      "itemtypename": "Heading/Information",
+      "downstream": [
         {
-            "itemid":2,
-            "name":"test2",
-            "itemtypename" : "Heading Item Type",            
-            "downstream":
+          "itemtypename": "Heading/Information",
+          "downstream": [
             {
-                "itemid":3,
-                "itemtypename" : "Heading Item Type",                
-                "name":"test3"      
+              "itemtypename": "hj"
             }
+          ]
+        },
+        {
+          "itemtypename": "his",
+          "downstream": [
+            {
+              "itemtypename": "Hellos"
+            }
+          ]
         }
+      ]
     },
     {
-        "itemid":1,
-        "name":"test1-2",
-        "itemtypename" : "Heading/Information",        
-        "downstream":
+      "itemtypename": "oii",
+      "downstream": [
         {
-            "itemid":2,
-            "name":"test2-2",
-            "itemtypename" : "Heading/Information",                    
-            "downstream":
+          "itemtypename": "Heading Item Type",
+          "downstream": [
             {
-                "itemid":4,
-                "itemtypename" : "Heading/Information",                        
-                "name":"test4-2"      
+              "itemtypename": "oiis"
             }
+          ]
+        },
+        {
+          "itemtypename": "oii",
+          "downstream": [
+            {
+              "itemtypename": "oiis"
+            }
+          ]
         }
+      ]
     },
     {
-        "itemid":1,
-        "name":"test1-3",
-        "downstream":
+      "itemtypename": "name",
+      "downstream": [
         {
-            "itemid":2,
-            "name":"test2-3",
-            "downstream":
+          "itemtypename": "name1",
+          "downstream": [
             {
-                "itemid":3,
-                "name":"test3-3",   
-                "downstream":
-                {
-                    "itemid":5,
-                    "name":"test5-3",
-                    "downstream":
-                    {
-                        "itemid":6,
-                        "name":"test6-3"      
-                    }
-                }
+              "itemtypename": "name2"
             }
-            
-        }
-    },
-    {
-        "id":12,
-	    "project": 169,
-	    "projectname": 1,
-	    "itemtype": 1,
-	    "itemtypename": 1,
-	    "itemid": 12,
-	    "gid": "R0001",
-	    "name": "1 <h1>This is a long</h1> text with<div class='class' style='color':'red;'>hello</div>a line break in the mgiddle. Here is the second line. Here is the fourth line comes here",
-	    "description": "1 <h1>This is a long</h1> text with<div style='color':'red;'>hello</div>a <b>line</b> break in the mgiddle. Here is the second line. Here is the fourth line comes here",
-        "downstream":
+          ]
+        },
         {
-            "id":2,
-		    "project": 169,
-		    "projectname": 1,
-		    "itemtype": 1,
-		    "itemtypename": 1,
-		    "itemid": 2,
-		    "gid": "R0001",
-		    "name": "1 <h1>This is a long</h1> text with<div class='class' style='color':'red;'>hello</div>a line break in the mgiddle. Here is the second line. Here is the fourth line comes here",
-		    "description": "1 <h1>This is a long</h1> text with<div style='color':'red;'>hello</div>a <b>line</b> break in the mgiddle. Here is the second line. Here is the fourth line comes here",
-            "downstream":
+          "itemtypename": "name3",
+          "downstream": [
             {
-                "id":3,
-			    "project": 169,
-			    "projectname": 1,
-			    "itemtype": 1,
-			    "itemtypename": 1,
-			    "itemid": 3,
-			    "gid": "R0001",
-			    "name": "1 <h1>This is a long</h1> text with<div class='class' style='color':'red;'>hello</div>a line break in the mgiddle. Here is the second line. Here is the fourth line comes here",
-			    "description": "1 <h1>This is a long</h1> text with<div style='color':'red;'>hello</div>a <b>line</b> break in the mgiddle. Here is the second line. Here is the fourth line comes here"
+              "itemtypename": "name4"
             }
+          ]
         }
-    },
-    {
-        "id":12,
-	    "project": 169,
-	    "projectname": 1,
-	    "itemtype": 1,
-	    "itemtypename": 1,
-	    "itemid": 12,
-	    "gid": "R0001",
-	    "name": "1 <h1>This is a long</h1> text with<div class='class' style='color':'red;'>hello</div>a line break in the mgiddle. Here is the second line. Here is the fourth line comes here",
-	    "description": "1 <h1>This is a long</h1> text with<div style='color':'red;'>hello</div>a <b>line</b> break in the mgiddle. Here is the second line. Here is the fourth line comes here",
-        "downstream":
-        {
-            "id":2,
-		    "project": 16900,
-		    "projectname": 1,
-		    "itemtype": 1,
-		    "itemtypename": 1,
-		    "itemid": 2,
-		    "gid": "R0001",
-		    "name": "1 <h1>This is a long</h1> text with<div class='class' style='color':'red;'>hello</div>a line break in the mgiddle. Here is the second line. Here is the fourth line comes here",
-		    "description": "1 <h1>This is a long</h1> text with<div style='color':'red;'>hello</div>a <b>line</b> break in the mgiddle. Here is the second line. Here is the fourth line comes here",
-            "downstream":
-            {
-                "id":4,
-			    "project": 169,
-			    "projectname": 1,
-			    "itemtype": 1,
-			    "itemtypename": 1,
-			    "itemid": 4,
-			    "gid": "R0001",
-			    "name": "1 <h1>This is a long</h1> text with<div class='class' style='color':'red;'>hello</div>a line break in the mgiddle. Here is the second line. Here is the fourth line comes here",
-			    "description": "1 <h1>This is a long</h1> text with<div style='color':'red;'>hello</div>a <b>line</b> break in the mgiddle. Here is the second line. Here is the fourth line comes here"
-            }
-        }
+      ]
     }    
-]
+  ]

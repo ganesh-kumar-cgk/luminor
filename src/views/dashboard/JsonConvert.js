@@ -13,43 +13,34 @@ const JsonConvert = () => {
     function convert(data){
       let newJSON = [];
       let map = new Map();
+      let check = [];
       for (const obj of data) {
-        if (!map.has(obj.itemid)) {
-            const curr = {
-                "name": obj.name,
-                "project": obj.project,
-                "projectname":obj.projectname,
-                "itemtype":obj.itemtype,
-                "itemtypename":obj.itemtypename,
-                "itemid":obj.itemid,
-                "gid":obj.gid,
-                "description":obj.description,                  
-                "downstream": []
-            };
-            map.set(obj.itemid, curr);
-            newJSON.push(curr);
-        }
-    
-        let downstream = obj.downstream;
-        let parent = map.get(obj.itemid);
-        while (downstream) {
-            let next = parent.downstream.find(d => d.itemid === downstream.itemid);
-            if (!next) {
-                next = {
-                    "name": downstream.name,
-                    "project": downstream.project,
-                    "projectname":downstream.projectname,
-                    "itemtype":downstream.itemtype,
-                    "itemtypename":downstream.itemtypename,
-                    "itemid":downstream.itemid,
-                    "gid":downstream.gid,
-                    "description":downstream.description,                      
-                    "downstream": []
-                };
-                parent.downstream.push(next);
+        if (obj['itemtypename'] !== "Heading Item Type" && obj['itemtypename'] !== "Heading/Information") {          
+          check.push(obj.itemtypename)
+          let downstream = obj.downstream;
+            for(let j=0;j<downstream.length;j++){
+                check.push(downstream[j]['itemtypename'])
+                if (downstream[j]['itemtypename'] !== "Heading Item Type" && downstream[j]['itemtypename'] !== "Heading/Information") {          
+
+                }
+                else{
+                  check.push(downstream[j]['itemtypename'])
+                }
             }
-            parent = next;
-            downstream = downstream.downstream;
+            console.log(check);
+            let containsHeading = check.some(function(item) {
+              return item === "Heading Item Type" || item === "Heading/Information";
+            });
+            
+            if (containsHeading) {
+              console.log("The array contains either Heading Item Type or Heading/Information");
+            } else {
+              newJSON.push(obj)
+            }        
+            check = [];    
+        }
+        else{
+
         }
       }
       console.log(newJSON);
