@@ -1,21 +1,21 @@
 {
   "name": "roots",
-  "gid": "R0001","project":"161","projectname":"project name","itemtypename":"1","itemid":"item id","description":"desc",
+  "gid": "R0001","project":"161","projectname":"project name","itemtypename":"1shgj jhgjhg  ygj","itemid":"item id","description":"desc",
   "itemtype": 1,
   "downstream":[
    {
       "name": "1 This is a long text with a line break in the mgiddle.\nHere is the second line. Here is the fourth line comes here",
-      "gid": "R0002","project":"161","projectname":"project name","itemtypename":"2","itemid":"1","description":"1 This is a long text with a line break in the mgiddle.\nHere is the second line. Here is the fourth line comes here",
+      "gid": "R0002","project":"161","projectname":"project name","itemtypename":"2s jgj jhgj ghg gh","itemid":"1","description":"1 This is a long text with a line break in the mgiddle.\nHere is the second line. Here is the fourth line comes here",
       "itemtype": 2,
       "downstream": [
          {
             "name": "2 This is a long text with a line break in the mgiddle.\nHere is the second line. Here is the fourth line comes here",
-            "gid": "R0003","project":"161","projectname":"project name","itemtypename":"2","itemid":"item id","description":"1 This is a long text with a line break in the mgiddle.\nHere is the second line. Here is the fourth line comes here",
+            "gid": "R0003","project":"161","projectname":"project name","itemtypename":"3s","itemid":"item id","description":"1 This is a long text with a line break in the mgiddle.\nHere is the second line. Here is the fourth line comes here",
             "itemtype": 2,
             "downstream": [
                {
                   "name": "child of a.1",
-                  "gid": "R0004","project":"161","projectname":"project name","itemtypename":"4","itemid":"item id","description":"1 This is a long text with a line break in the mgiddle.\nHere is the second line. Here is the fourth line comes here",
+                  "gid": "R0004","project":"161","projectname":"project name","itemtypename":"4s","itemid":"item id","description":"1 This is a long text with a line break in the mgiddle.\nHere is the second line. Here is the fourth line comes here",
                   "itemtype": 3,
                   "downstream": [
                      {

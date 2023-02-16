@@ -7,44 +7,72 @@ const JsonConvert = () => {
     const [start, setStart] = useState(0); 
     const [end, setEnd] = useState(40);
     const [loadingSpinner, setLoadingSpinner] = useState(false);
+    let [ledger, setLedger] = useState([]);
+    let [ledgerName, setLedgerName] = useState([]);
+
+    let uniqueNames = new Set();
+
     function handleLoadMore() {   
       convert(treedata);
     }
     function convert(data){
-      let newJSON = [];
-      let map = new Map();
-      let check = [];
-      for (const obj of data) {
-        if (obj['itemtypename'] !== "Heading Item Type" && obj['itemtypename'] !== "Heading/Information") {          
-          check.push(obj.itemtypename)
-          let downstream = obj.downstream;
-            for(let j=0;j<downstream.length;j++){
-                check.push(downstream[j]['itemtypename'])
-                if (downstream[j]['itemtypename'] !== "Heading Item Type" && downstream[j]['itemtypename'] !== "Heading/Information") {          
+      // let newJSON = [];
+      // let map = new Map();
+      // let check = [];
+      // for (const obj of data) {
+      //   if (obj['itemtypename'] !== "Heading Item Type" && obj['itemtypename'] !== "Heading/Information") {          
+      //     check.push(obj['itemtypename'])
+      //     if(obj.downstream){
+      //       let downstream = obj.downstream;
+      //       for(let j=0;j<downstream.length;j++){
+      //           check.push(downstream[j]['itemtypename'])
+      //           if (downstream[j]['itemtypename'] !== "Heading Item Type" && downstream[j]['itemtypename'] !== "Heading/Information") {          
 
-                }
-                else{
-                  check.push(downstream[j]['itemtypename'])
-                }
-            }
-            console.log(check);
-            let containsHeading = check.some(function(item) {
-              return item === "Heading Item Type" || item === "Heading/Information";
-            });
+      //           }
+      //           else{
+      //             check.push(downstream[j]['itemtypename'])
+      //           }
+      //       }
+      //       console.log(check);
+      //       let containsHeading = check.some(function(item) {
+      //         return item === "Heading Item Type" || item === "Heading/Information";
+      //       });
             
-            if (containsHeading) {
-              console.log("The array contains either Heading Item Type or Heading/Information");
-            } else {
-              newJSON.push(obj)
-            }        
-            check = [];    
-        }
-        else{
+      //       if (containsHeading) {
+      //         console.log("The array contains either Heading Item Type or Heading/Information");
+      //       } else {
+      //         newJSON.push(obj)
+      //       }        
+      //       check = [];    
+      //     }
+      //     else{
+      //       newJSON.push(obj);
+      //     }
+      //   }
+      //   else{
 
+      //   }
+      // }
+      // data.forEach(item => {        
+      //   uniqueNames.add({itemtype:item.itemtype,itemtypename:item.itemtypename});
+      //   if (item.downstream) {
+      //     convert(item.downstream);
+      //   }
+      // });
+      // console.log(Array.from(uniqueNames));
+      // let uniqueArray = [...new Set(uniqueNames.map(JSON.stringify))].map(JSON.parse);
+
+      // console.log(uniqueArray);      
+      // setLedgerName(Array.from(uniqueNames));      
+      data.forEach(item => {        
+        uniqueNames.add(item.itemtypename);
+        if (item.downstream) {
+          convert(item.downstream);
         }
-      }
-      console.log(newJSON);
-      document.getElementById('print').innerText = JSON.stringify(newJSON, null, 2);
+      });
+      console.log(uniqueNames);      
+      // console.log(newJSON);
+      // document.getElementById('print').innerText = JSON.stringify(newJSON, null, 2);
     }
     const handleChange = e => {
       console.log("changed");

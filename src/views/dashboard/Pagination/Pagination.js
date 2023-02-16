@@ -16,14 +16,12 @@ if (props.items && props.items.length) {
 }, [props.items, initialPage, props.pageSize]);
 
 useEffect(() => {
-  console.log(props);    
   if (props.items) {
     setPage(initialPage);
   }
 }, [props.items, initialPage]);
 
 const setPage = (page) => {
-    console.log(page);
     let { items, pageSize } = props;
     let newPager = pager;
 
@@ -40,8 +38,6 @@ const setPage = (page) => {
 
   let totalPages = Math.ceil(totalItems / pageSize);
   let startPage, endPage;
-  console.log(totalPages);
-  console.log(currentPage);
   setLastPage(totalPages);
   setCurrentPage(currentPage);
   if (totalPages <= 5) {
